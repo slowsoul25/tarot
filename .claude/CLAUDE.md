@@ -14,6 +14,7 @@ https://claude.ai/artifact/XTM5brJrKxe2McUn4BmqKg
    `NODE_PATH=$(npm root -g) node .tools/build-answer.js <製作器.html> <generator.json> <輸出資料夾>`
    會用製作器自己的 `buildWebA` 產生跟「⬇️ 下載解答網頁 HTML」一樣的檔案，檔名也一樣。
    - `NO_ANSWERS`：三個解答還沒寫好。
+   - `NO_IMAGES`：牌面用的是使用者自己上傳的照片（只存在他的瀏覽器，雲端沒有），做出來的圖會不一樣。請使用者在製作器按「⬇️ 下載解答網頁 HTML」，把下載的檔案傳給你，直接上傳那個檔案。
    - `NO_TUNE` / `NO_THEME`：請使用者在製作器按一次「👀 預覽解答網頁」（會配調頻、決定色調並存雲端），再重跑。
 4. 跟使用者確認題目對（雲端存的是製作器「目前打開的那一期」）。同名檔案已存在時先問要不要覆蓋。
 5. 把檔案放到 repo 根目錄，commit 訊息用 `新增解答：<題目>`，推到 `main`。

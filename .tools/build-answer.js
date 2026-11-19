@@ -16,6 +16,7 @@ window.__mk=async()=>{
   ['A','B','C'].forEach(L=>ans[L].tune=S.webTune.t[L]);
   if(S.webThemeFor!==q)throw new Error('NO_THEME: 這一期還沒在製作器按過「預覽」或「下載」，色調還沒決定');
   const rec={title:q,intro:(S.introMain||'').replace(/\\s*\\n+\\s*/g,'，'),answers:ans,theme:ORDT[S.webThemeIdx],t:Date.now(),postDate:S.postDate||'',titleLines:two(S.title),cardStyle:S.cardStyle,optImg:Object.assign({},S.optImg||{})};
+  if(S.cardStyle==='lib'&&!['a','b','c'].every(k=>(S.photos&&S.photos[k])||byId((S.optImg||{})[k])))throw new Error('NO_IMAGES: 這一期的牌面是使用者自己上傳的照片，照片只存在他的瀏覽器、沒有存到雲端，這個工具做不出一樣的圖');
   const r=await buildWebA(rec);return {...r,title:q,theme:rec.theme};
 };
 `;
