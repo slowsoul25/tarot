@@ -19,3 +19,8 @@ https://claude.ai/artifact/XTM5brJrKxe2McUn4BmqKg
 4. 跟使用者確認題目對（雲端存的是製作器「目前打開的那一期」）。同名檔案已存在時先問要不要覆蓋。
 5. 把檔案放到 repo 根目錄，commit 訊息用 `新增解答：<題目>`，推到 `main`。
 6. 給使用者網址：`https://slowsoul25.github.io/tarot/<檔名 URL 編碼>`（若網站網址不同以使用者為準）。
+
+## 製作器的圖庫
+
+使用者要把圖片「加進製作器圖庫」時：讀製作器 HTML，把圖片加到 `BGLIB` 陣列最後（`{"c":分類,"n":名稱,"d":dataURL}`，id 依順序自動是 `b<index>`），再在 `OBJLIB` 最後加 `{"id":"o<新號碼>","n":名稱,"f":色系,"fs":[色系...],"ref":"b<對應背景 id>","k":分類}`，這樣同一張圖可以當背景也可以當選項圖。用 bytes 操作插入（檔案裡有控制字元），用 `.tools` 外的暫存腳本測試渲染後，再用 Artifact publish 帶 `url` 發佈。
+已加過：聖誕節 4 張（b146–b149、o157–o160）。
