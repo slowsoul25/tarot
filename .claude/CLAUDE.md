@@ -6,7 +6,7 @@
 
 解答頁是用 claude.ai 上的製作器「慢靈魂｜塔羅測驗產生器」做的：
 https://claude.ai/artifact/XTM5brJrKxe2McUn4BmqKg
-製作器不要搬、不要改（它的 AI 出題／解答／調頻和雲端存檔只在 claude.ai 上能用）。
+製作器不要搬到別處（它的 AI 出題／解答／調頻和雲端存檔只在 claude.ai 上能用）；要改功能時，改完用 Artifact publish 帶 `url` 發佈回同一個網址。
 
 1. 用 Artifact 工具 `action: "read"` 讀製作器，得到存好的完整 HTML 路徑（tool-results 裡的 artifact-*.html）。
 2. 用 ArtifactData `get` 抓雲端這一期：`url` 同上、`collection: "data/users/me"`、`doc_id: "generator"`，加 `out_dir` 存成 JSON。
@@ -30,3 +30,18 @@ https://claude.ai/artifact/XTM5brJrKxe2McUn4BmqKg
 
 - 解答網頁會帶上出題篇第一頁的背景，上面蓋一層跟色調一樣的淡霧（製作器 `buildWeb` 已內建，`.tools/build-answer.js` 走同一套）。
 - 用過的背景不再出現在圖庫：製作器在「預覽／下載解答網頁」時把這期的背景記進 `S.usedBg`（會同步到雲端），圖庫和隨機挑背景都會跳過它。不要真的從 BGLIB 刪資料，舊的期數還會用到。
+
+## 使用者說「下一篇」時的流程
+
+使用者選擇：題目由 Claude 出、使用者選；抽牌和寫解答照常在製作器裡按。
+
+1. 先看出過的題目：repo 根目錄所有 `慢靈魂解答_*.html` 的題目，加上雲端 `generator` 的 `past`，都不能重複或太像。
+2. 照製作器 `hookPrompt()` 的規則想題目（熱門大眾題型平均分散：分數／程度、時間／月份運勢、認識自己、課題／卡點、對方心意、輕鬆好玩；感情題約一半）：
+   - 題目最多 2 行、每行最多 11 字、整句 20 字內，兩行長度平均，用 `\n` 斷行
+   - 引言 1 行、最多 18 字，說出讀者看到題目時心裡卡的感受；不能用問號、不能反問、不重複題目的字、不要編無關場景、不用引號
+   - 繁體中文台灣口語
+3. 用 AskUserQuestion 跳 4 個題目讓使用者選（label 放題目，description 放引言和題型），使用者也可以自己打。
+4. 用 ArtifactData `get` 讀 `data/users/me/generator` 拿 `version`，再 `update`（帶 `if_version`）寫入：
+   `{"nextTopic":{"title":"第一行\n第二行","intro":"引言"},"t":<現在的毫秒時間>}`
+   製作器打開或重新整理時會自動：存好上一期、換上題目和引言、清空抽牌和解答、隨機換一張沒用過的背景、隨機配一組牌面圖，然後刪掉 `nextTopic`。
+5. 告訴使用者打開或重新整理製作器，接著按「抽牌並寫解答」。
