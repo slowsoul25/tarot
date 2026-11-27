@@ -44,7 +44,7 @@ https://claude.ai/artifact/XTM5brJrKxe2McUn4BmqKg
    - 繁體中文台灣口語
 3. 用 AskUserQuestion 跳 4 個題目讓使用者選（label 放題目，description 放引言和題型），使用者也可以自己打。
 4. 用 ArtifactData `get` 讀 `data/users/me/generator` 拿 `version`，再 `update`（帶 `if_version`）寫入：
-   `{"nextTopic":{"title":"第一行\n第二行","intro":"引言"},"t":<現在的毫秒時間>}`
+   `{"nextTopic":{"id":"q<毫秒時間>","title":"第一行\n第二行","intro":"引言"},"t":<現在的毫秒時間>}`（`id` 每次不同；製作器同步時會保留沒套用過的 nextTopic，套用後記在 `S.nextDone`）
    製作器打開或重新整理時會自動：存好上一期、換上題目和引言、清空抽牌和解答、隨機換一張沒用過的背景、隨機配一組牌面圖，然後刪掉 `nextTopic`。
 5. 告訴使用者打開或重新整理製作器，接著按「抽牌並寫解答」。
 
